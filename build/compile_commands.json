@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/conrev/Raytracing-Journey/build",
+  "command": "/usr/bin/clang++   -g -o CMakeFiles/RayTracer.dir/main.cc.o -c /home/conrev/Raytracing-Journey/main.cc",
+  "file": "/home/conrev/Raytracing-Journey/main.cc"
+}
+]
