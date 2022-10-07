@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include "vec3.h"
+
 int main()
 {
 
@@ -9,6 +11,15 @@ int main()
     const int image_height = 256;
 
     // Render
+
+    vec3 *a = new vec3{1.0, 1.0, 1.0};
+    vec3 *b = new vec3{2.0, 2.0, 2.0};
+
+    std::cout << *a << std::endl;
+    *a -= *b;
+    std::cout << *a << std::endl;
+    *a *= 2;
+    std::cout << *a << std::endl;
 
     std::cout << "P3\n"
               << image_width << ' ' << image_height << "\n255\n";
@@ -25,7 +36,7 @@ int main()
             int ig = static_cast<int>(255.999 * g);
             int ib = static_cast<int>(255.999 * b);
 
-            std::cout << ir << ' ' << ig << ' ' << ib << '\n';
+            // std::cout << ir << ' ' << ig << ' ' << ib << '\n';
         }
     }
 }
