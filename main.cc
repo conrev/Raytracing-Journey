@@ -1,12 +1,24 @@
 #include <iostream>
+#include <vector>
 #include "color.h"
 #include "vec3.h"
 #include "ray.h"
+#include "sphere.h"
 
-color ray_color(const ray &r)
+color ray_color(std ::vector<sphere> &objects, const ray &r)
 {
+    hitdata hit;
+
+    for (auto obj : objects)
+    {
+        bool intersect = obj.hit(r, -99999.0f, 99999.0f, hit);
+        if (intersect)
+        {
+            return 0.5 * (hit.normal + vec3(1.0f, 1.0f, 1.0f));
+        }
+    }
     vec3 unit_direction = r.direction().normalize();
-    auto t = 0.5 * (unit_direction.y() + 1.0);
+    double t = 0.5 * (unit_direction.y() + 1.0);
     return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
 }
 
@@ -33,14 +45,12 @@ int main()
     auto lower_left_corner = origin - horizontal / 2 - vertical / 2 - vec3(0, 0, focal_length);
 
     // Render
+    std::vector<sphere> objects;
+    objects.push_back(sphere{vec3(0.0, 0.0, -1.0f), 0.5f});
 
-    vec3 example{1, 2, 3};
-    std::cerr << example << std::endl;
-    std::cerr << example.normalize() << std::endl;
-    std::cerr << example << std::endl;
-
-    std::cout << "P3\n"
-              << image_width << " " << image_height << "\n255\n";
+    std::cout
+        << "P3\n"
+        << image_width << " " << image_height << "\n255\n";
 
     for (int j = image_height - 1; j >= 0; --j)
     {
@@ -50,7 +60,7 @@ int main()
             auto u = double(i) / (image_width - 1); // normalized pixel coordinates
             auto v = double(j) / (image_height - 1);
             ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin); // shoot from originto "canvas/viewport" coordinate
-            color pixel_color = ray_color(r);
+            color pixel_color = ray_color(objects, r);
             write_color(std::cout, pixel_color);
         }
     }

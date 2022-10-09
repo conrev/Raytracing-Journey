@@ -11,9 +11,9 @@ public:
     {
     }
 
-    point3 eval(double t)
+    point3 eval(double t) const
     {
-        return m_origin + m_direction * t;
+        return m_origin + (m_direction * t);
     }
 
     point3 origin() const { return m_origin; }
