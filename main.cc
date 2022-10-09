@@ -1,21 +1,25 @@
-#include <iostream>
-#include <vector>
-#include "color.h"
-#include "vec3.h"
-#include "ray.h"
-#include "sphere.h"
+#include "common.h"
 
 color ray_color(std ::vector<sphere> &objects, const ray &r)
 {
     hitdata hit;
+    double min_t = constants::inf;
+    bool hit_anything = false;
 
-    for (auto obj : objects)
+    for (const auto &obj : objects)
     {
-        bool intersect = obj.hit(r, -99999.0f, 99999.0f, hit);
+        hitdata temp;
+        bool intersect = obj.hit(r, 0.0f, min_t, temp);
         if (intersect)
         {
-            return 0.5 * (hit.normal + vec3(1.0f, 1.0f, 1.0f));
+            hit_anything = true;
+            hit = temp;
+            min_t = temp.t;
         }
+    }
+    if (hit_anything)
+    {
+        return 0.5 * (hit.normal + color(1.0, 1.0, 1.0));
     }
     vec3 unit_direction = r.direction().normalize();
     double t = 0.5 * (unit_direction.y() + 1.0);
@@ -47,6 +51,7 @@ int main()
     // Render
     std::vector<sphere> objects;
     objects.push_back(sphere{vec3(0.0, 0.0, -1.0f), 0.5f});
+    objects.push_back(sphere{vec3(0.0, -100.5, -1.0f), 100.0f});
 
     std::cout
         << "P3\n"
