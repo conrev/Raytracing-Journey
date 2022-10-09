@@ -1,3 +1,0 @@
-/home/conrev/Raytracing-Journey/build/CMakeFiles/RayTracer.dir
-/home/conrev/Raytracing-Journey/build/CMakeFiles/edit_cache.dir
-/home/conrev/Raytracing-Journey/build/CMakeFiles/rebuild_cache.dir
