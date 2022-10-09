@@ -1,4 +1,0 @@
-[submodule "external/glm"]
-    path = external/glm
-    url = https://github.com/g-truc/glm
-    branch = 0.9.9.8
