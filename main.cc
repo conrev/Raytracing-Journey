@@ -1,15 +1,25 @@
 #include "common.h"
+#include "color.h"
+#include "vec3.h"
+#include "ray.h"
+#include "sphere.h"
+#include "camera.h"
 
-color ray_color(std ::vector<sphere> &objects, const ray &r)
+color ray_color(std ::vector<sphere> &objects, const ray &r, int recurse_depth)
 {
     hitdata hit;
     double min_t = constants::inf;
     bool hit_anything = false;
 
+    if (recurse_depth <= 0)
+    {
+        return color(0.0, 0.0, 0.0);
+    }
+
     for (const auto &obj : objects)
     {
         hitdata temp;
-        bool intersect = obj.hit(r, 0.0f, min_t, temp);
+        bool intersect = obj.hit(r, 0.001f, min_t, temp);
         if (intersect)
         {
             hit_anything = true;
@@ -19,7 +29,8 @@ color ray_color(std ::vector<sphere> &objects, const ray &r)
     }
     if (hit_anything)
     {
-        return 0.5 * (hit.normal + color(1.0, 1.0, 1.0));
+        point3 diffuse_target = hit.hit_position + hit.normal + random_inside_unit_sphere().normalize();
+        return 0.5 * ray_color(objects, ray(hit.hit_position, diffuse_target - hit.hit_position), recurse_depth - 1);
     }
     vec3 unit_direction = r.direction().normalize();
     double t = 0.5 * (unit_direction.y() + 1.0);
@@ -29,27 +40,14 @@ color ray_color(std ::vector<sphere> &objects, const ray &r)
 int main()
 {
 
-    // Image
-    const auto aspect_ratio = 16.0 / 9.0;
+    camera cam;
+    const double aspect_ratio = 16.0f / 9.0f;
     const int image_width = 400;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
 
-    // Camera
-
-    auto viewport_height = 2.0;
-    auto viewport_width = aspect_ratio * viewport_height;
-    auto focal_length = 1.0;
-
-    auto origin = point3(0, 0, 0);
-    // size of the viewport horizontally
-    auto horizontal = vec3(viewport_width, 0, 0);
-    // size of the viewport vertically
-    auto vertical = vec3(0, viewport_height, 0);
-    // 3D position of lower level corner of the viewport
-    auto lower_left_corner = origin - horizontal / 2 - vertical / 2 - vec3(0, 0, focal_length);
-
     // Render
-    std::vector<sphere> objects;
+    std::vector<sphere>
+        objects;
     objects.push_back(sphere{vec3(0.0, 0.0, -1.0f), 0.5f});
     objects.push_back(sphere{vec3(0.0, -100.5, -1.0f), 100.0f});
 
@@ -62,11 +60,16 @@ int main()
         std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;
         for (int i = 0; i < image_width; ++i)
         {
-            auto u = double(i) / (image_width - 1); // normalized pixel coordinates
-            auto v = double(j) / (image_height - 1);
-            ray r(origin, lower_left_corner + u * horizontal + v * vertical - origin); // shoot from originto "canvas/viewport" coordinate
-            color pixel_color = ray_color(objects, r);
-            write_color(std::cout, pixel_color);
+            color final_color(0.0, 0.0, 0.0f);
+            for (int s = 0; s < constants::samples_per_pixel; ++s)
+            {
+                auto u = double(i + random_double()) / (image_width - 1); // normalized pixel coordinates
+                auto v = double(j + random_double()) / (image_height - 1);
+                // shoot from originto "canvas/viewport" coordinate
+                ray r = cam.generate_ray(u, v);
+                final_color += ray_color(objects, r, constants::ray_recursive_depth);
+            }
+            write_color(std::cout, final_color, constants::samples_per_pixel);
         }
     }
 

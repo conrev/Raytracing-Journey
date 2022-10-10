@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cmath>
 
+#include "common.h"
+
 class vec3
 {
 public:
@@ -75,6 +77,16 @@ public:
         return (*this) /= (*this).length();
     }
 
+    inline static vec3 random()
+    {
+        return vec3(random_double(), random_double(), random_double());
+    }
+
+    inline static vec3 random(double min, double max)
+    {
+        return vec3(random_double(min, max), random_double(min, max), random_double(min, max));
+    }
+
 private:
     double m_data[3];
 };
@@ -129,6 +141,19 @@ inline vec3 cross(const vec3 &u, const vec3 &v)
 inline vec3 unit_vector(const vec3 &v)
 {
     return v / v.length();
+}
+
+inline vec3 random_inside_unit_sphere()
+{
+    // TODO : Ew
+    while (true)
+    {
+        vec3 random_point = vec3::random(-1, 1);
+        // outside unit circle
+        if (random_point.length_squared() > 1)
+            continue;
+        return random_point;
+    }
 }
 
 // Type aliases for vec3

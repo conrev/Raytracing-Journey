@@ -9,6 +9,24 @@ struct hitdata
     point3 hit_position;
     vec3 normal;
     double t;
+    bool front_face;
+
+    inline void set_face_normal(const ray &source, const vec3 &outward_normal)
+    {
+        // if their angle is less than 90, they face the same direction
+        // meaning that the contact is inside the surface
+        // per convention, normal is reverse direction from the ray
+        if (dot(source.direction(), outward_normal) > 0.0f)
+        {
+            front_face = false;
+            normal = -outward_normal;
+        }
+        else
+        {
+            front_face = true;
+            normal = outward_normal;
+        }
+    }
 };
 
 class hittable
