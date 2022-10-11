@@ -25,6 +25,7 @@ bool sphere::hit(const ray &raySource, double t_min, double t_max, hitdata &hitI
     hitInfo.hit_position = raySource.eval(root);
     vec3 outward_normal = (hitInfo.hit_position - m_center).normalize();
     hitInfo.set_face_normal(raySource, outward_normal);
+    hitInfo.hit_material = m_material;
 
     return true;
 }

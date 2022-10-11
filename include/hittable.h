@@ -1,14 +1,19 @@
 #ifndef HITTABLE_H
 #define HITTABLE_H
 
+#include "common.h"
 #include "vec3.h"
 #include "ray.h"
+
+class material;
 
 struct hitdata
 {
     point3 hit_position;
     vec3 normal;
     double t;
+    std::shared_ptr<material> hit_material;
+
     bool front_face;
 
     inline void set_face_normal(const ray &source, const vec3 &outward_normal)

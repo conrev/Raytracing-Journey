@@ -25,6 +25,13 @@ public:
         return m_data[2];
     }
 
+    bool near_zero() const
+    {
+        // Return true if the vector is close to zero in all dimensions.
+        const auto s = 1e-8;
+        return (fabs(m_data[0]) < s) && (fabs(m_data[1]) < s) && (fabs(m_data[2]) < s);
+    }
+
     // TODO : huh??
     vec3 operator-() const
     {
@@ -136,6 +143,11 @@ inline vec3 cross(const vec3 &u, const vec3 &v)
     return vec3(u.y() * v.z() - u.z() * v.y(),
                 u.z() * v.x() - u.x() * v.z(),
                 u.x() * v.y() - u.y() * v.x());
+}
+
+inline vec3 reflect(const vec3 &target, const vec3 &mirror)
+{
+    return target - 2 * dot(target, mirror) * mirror;
 }
 
 inline vec3 unit_vector(const vec3 &v)

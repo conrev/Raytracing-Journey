@@ -5,6 +5,7 @@
 #include <vector>
 #include <limits>
 #include <cstdlib>
+#include <memory>
 
 namespace constants
 {

@@ -3,6 +3,8 @@
 #include "vec3.h"
 #include "ray.h"
 #include "sphere.h"
+#include "lambertian.h"
+#include "metal.h"
 #include "camera.h"
 
 color ray_color(std ::vector<sphere> &objects, const ray &r, int recurse_depth)
@@ -29,8 +31,12 @@ color ray_color(std ::vector<sphere> &objects, const ray &r, int recurse_depth)
     }
     if (hit_anything)
     {
-        point3 diffuse_target = hit.hit_position + hit.normal + random_inside_unit_sphere().normalize();
-        return 0.5 * ray_color(objects, ray(hit.hit_position, diffuse_target - hit.hit_position), recurse_depth - 1);
+        color current_color;
+        ray scattered_ray;
+        if (hit.hit_material->scatter(r, hit, current_color, scattered_ray))
+            return current_color * ray_color(objects, scattered_ray, recurse_depth - 1);
+        // object doesnt scatter any light
+        return color(0.0, 0.0, 0.0);
     }
     vec3 unit_direction = r.direction().normalize();
     double t = 0.5 * (unit_direction.y() + 1.0);
@@ -48,8 +54,14 @@ int main()
     // Render
     std::vector<sphere>
         objects;
-    objects.push_back(sphere{vec3(0.0, 0.0, -1.0f), 0.5f});
-    objects.push_back(sphere{vec3(0.0, -100.5, -1.0f), 100.0f});
+
+    std::shared_ptr<lambertian> diffusered = std::make_shared<lambertian>(color(0.7, 0.3, 0.3));
+    std::shared_ptr<lambertian> diffusewhite = std::make_shared<lambertian>(color(0.8, 0.8, 0.8));
+    std::shared_ptr<metal> metalblue = std::make_shared<metal>(color(0.8, 0.8, 0.8));
+    objects.push_back(sphere{vec3(0.0, 0.0, -1.0f), 0.5f, diffusered});
+    objects.push_back(sphere{vec3(1.0f, 0.0, -1.0f), 0.4f, metalblue});
+    //   objects.push_back(sphere{vec3(-1.0f, 1.0, -1.7f), 0.3f});
+    objects.push_back(sphere{vec3(0.0, -100.5, -1.0f), 100.0f, diffusewhite});
 
     std::cout
         << "P3\n"

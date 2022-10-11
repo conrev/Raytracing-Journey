@@ -8,6 +8,8 @@ target_sources(${PROJECT_NAME}
 PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/objects/sphere.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/material/lambertian.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/material/metal.cc
 )
 
 
