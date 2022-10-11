@@ -6,8 +6,9 @@
 #include "lambertian.h"
 #include "metal.h"
 #include "camera.h"
+#include "plane.h"
 
-color ray_color(std ::vector<sphere> &objects, const ray &r, int recurse_depth)
+color ray_color(std ::vector<std::shared_ptr<hittable>> &objects, const ray &r, int recurse_depth)
 {
     hitdata hit;
     double min_t = constants::inf;
@@ -21,7 +22,7 @@ color ray_color(std ::vector<sphere> &objects, const ray &r, int recurse_depth)
     for (const auto &obj : objects)
     {
         hitdata temp;
-        bool intersect = obj.hit(r, 0.001f, min_t, temp);
+        bool intersect = obj->hit(r, 0.001f, min_t, temp);
         if (intersect)
         {
             hit_anything = true;
@@ -52,16 +53,16 @@ int main()
     const int image_height = static_cast<int>(image_width / aspect_ratio);
 
     // Render
-    std::vector<sphere>
+    std::vector<std::shared_ptr<hittable>>
         objects;
 
     std::shared_ptr<lambertian> diffusered = std::make_shared<lambertian>(color(0.7, 0.3, 0.3));
     std::shared_ptr<lambertian> diffusewhite = std::make_shared<lambertian>(color(0.8, 0.8, 0.8));
     std::shared_ptr<metal> metalblue = std::make_shared<metal>(color(0.8, 0.8, 0.8));
-    objects.push_back(sphere{vec3(0.0, 0.0, -1.0f), 0.5f, diffusered});
-    objects.push_back(sphere{vec3(1.0f, 0.0, -1.0f), 0.4f, metalblue});
+    objects.push_back(std::make_shared<sphere>(sphere{vec3(0.0, 0.0, -1.0f), 0.5f, diffusered}));
+    objects.push_back(std::make_shared<sphere>(sphere{vec3(1.0f, 0.0, -1.0f), 0.4f, metalblue}));
     //   objects.push_back(sphere{vec3(-1.0f, 1.0, -1.7f), 0.3f});
-    objects.push_back(sphere{vec3(0.0, -100.5, -1.0f), 100.0f, diffusewhite});
+    objects.push_back(std::make_shared<plane>(plane{point3{0.0, -0.5f, -0.0f}, vec3{0.0, 1.0, 0.0}, diffusewhite}));
 
     std::cout
         << "P3\n"
