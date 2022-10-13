@@ -35,4 +35,9 @@ inline double clamp(double x, double min, double max)
     return x;
 }
 
+inline double degrees_to_radians(double deg)
+{
+    return deg / 180.0f * constants::pi;
+}
+
 #endif

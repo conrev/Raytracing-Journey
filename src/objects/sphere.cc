@@ -1,4 +1,4 @@
-#include "sphere.h"
+#include "objects/sphere.h"
 
 bool sphere::hit(const ray &raySource, double t_min, double t_max, hitdata &hitInfo) const
 {

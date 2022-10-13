@@ -1,4 +1,4 @@
-#include "plane.h"
+#include "objects/plane.h"
 
 bool plane::hit(const ray &raySource, double t_min, double t_max, hitdata &hitInfo) const
 {

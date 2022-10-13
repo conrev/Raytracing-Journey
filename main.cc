@@ -2,11 +2,11 @@
 #include "color.h"
 #include "vec3.h"
 #include "ray.h"
-#include "sphere.h"
-#include "lambertian.h"
-#include "metal.h"
+#include "objects/sphere.h"
+#include "material/lambertian.h"
+#include "material/metal.h"
 #include "camera.h"
-#include "plane.h"
+#include "objects/plane.h"
 
 color ray_color(std ::vector<std::shared_ptr<hittable>> &objects, const ray &r, int recurse_depth)
 {
@@ -47,10 +47,9 @@ color ray_color(std ::vector<std::shared_ptr<hittable>> &objects, const ray &r, 
 int main()
 {
 
-    camera cam;
-    const double aspect_ratio = 16.0f / 9.0f;
+    camera cam(point3(0, 0, 0), point3(0, 0, 0), 130, 16.0 / 9.0);
     const int image_width = 400;
-    const int image_height = static_cast<int>(image_width / aspect_ratio);
+    const int image_height = static_cast<int>(image_width / cam.aspect_ratio());
 
     // Render
     std::vector<std::shared_ptr<hittable>>
