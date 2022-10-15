@@ -64,6 +64,14 @@ public:
         return *this;
     }
 
+    vec3 &operator*=(const vec3 &rhs)
+    {
+        this->m_data[0] = this->x() * rhs.x();
+        this->m_data[1] = this->y() * rhs.y();
+        this->m_data[2] = this->z() * rhs.z();
+        return *this;
+    }
+
     vec3 &operator/=(const double &rhs)
     {
         return *this *= 1 / rhs;

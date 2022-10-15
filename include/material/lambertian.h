@@ -3,6 +3,7 @@
 
 #include "material.h"
 #include "vec3.h"
+#include "hittable.h"
 
 class lambertian : public material
 {

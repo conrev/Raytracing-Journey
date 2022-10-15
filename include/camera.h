@@ -23,7 +23,7 @@ public:
         m_lower_left_corner = m_origin - m_horizontal_span / 2 - m_vertical_span / 2 - vec3(0, 0, focal_length);
     }
 
-    ray generate_ray(double u, double v)
+    ray generate_ray(double u, double v) const
     {
         return ray(m_origin, m_lower_left_corner + (u * m_horizontal_span) + (v * m_vertical_span) - m_origin);
     }

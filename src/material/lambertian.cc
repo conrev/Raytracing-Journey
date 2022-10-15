@@ -1,5 +1,4 @@
 #include "material/lambertian.h"
-#include "hittable.h"
 
 bool lambertian::scatter(const ray &ray_in, const hitdata &rec, color &attenuation, ray &scattered_ray) const
 {

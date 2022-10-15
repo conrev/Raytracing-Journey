@@ -11,8 +11,9 @@ PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/objects/plane.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/material/lambertian.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/material/metal.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/renderer.cc
 )
 
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE glm)
+target_link_libraries(${PROJECT_NAME} PRIVATE glm glad glfw)

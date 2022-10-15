@@ -9,10 +9,12 @@
 
 namespace constants
 {
-    const double inf = std::numeric_limits<double>::infinity();
-    const double pi = 3.1415926535897932385;
-    const double samples_per_pixel = 100;
-    const int ray_recursive_depth = 50;
+    const double INF = std::numeric_limits<double>::infinity();
+    const double PI = 3.1415926535897932385;
+    const double SAMPLES_PER_PIXEL = 100;
+    const int RAY_RECURSIVE_DEPTH = 50;
+    const int IMAGE_WIDTH = 400;
+
 }
 
 inline double random_double()
@@ -37,7 +39,7 @@ inline double clamp(double x, double min, double max)
 
 inline double degrees_to_radians(double deg)
 {
-    return deg / 180.0f * constants::pi;
+    return deg / 180.0f * constants::PI;
 }
 
 #endif

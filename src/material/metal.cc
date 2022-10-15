@@ -1,5 +1,4 @@
 #include "material/metal.h"
-#include "hittable.h"
 
 bool metal::scatter(const ray &ray_in, const hitdata &rec, color &attenuation, ray &scattered_ray) const
 {
