@@ -1,15 +1,15 @@
 #include "objects/plane.h"
 
-bool plane::hit(const ray &raySource, double t_min, double t_max, hitdata &hitInfo) const
+bool plane::hit(const ray &raySource, float t_min, float t_max, hitdata &hitInfo) const
 {
-    double denom = dot(raySource.direction(), m_normal);
-    double t = 0;
+    float denom = dot(raySource.direction(), m_normal);
+    float t = 0;
 
     if (std::abs(denom) > 1e-8)
     {
 
-        vec3 start_dif = m_point_in_plane - raySource.origin();
-        t = dot(start_dif, m_normal) / denom;
+        glm::vec3 start_dif = m_point_in_plane - raySource.origin();
+        t = glm::dot(start_dif, m_normal) / denom;
 
         if (t >= t_min && t <= t_max)
         {

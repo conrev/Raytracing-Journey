@@ -1,10 +1,10 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "material/material.h"
 #include "common.h"
 #include "hittable.h"
 #include "camera.h"
-#include "material/material.h"
 
 class renderer
 {
@@ -16,8 +16,8 @@ public:
     }
 
 public:
-    color per_pixel(double u, double v) const;
-    color per_pixel(const ray &r, int recurse_depth) const;
+    glm::vec3 per_pixel(float u, float v) const;
+    glm::vec3 per_pixel(const ray &r, int recurse_depth) const;
     void render();
 
 private:
@@ -25,7 +25,7 @@ private:
     int m_image_height;
     camera m_camera;
     std::vector<std::shared_ptr<hittable>> m_objects;
-    std::vector<color> m_image_data;
+    std::vector<glm::vec3> m_image_data;
 };
 
 #endif
