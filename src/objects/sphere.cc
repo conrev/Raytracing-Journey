@@ -1,5 +1,6 @@
-#include "objects/sphere.h"
 #include "glm/gtx/norm.hpp"
+
+#include "objects/sphere.h"
 
 bool sphere::hit(const ray &raySource, float t_min, float t_max, hitdata &hitInfo) const
 {

@@ -1,5 +1,6 @@
-#include "material/metal.h"
 #include "glm/gtc/random.hpp"
+
+#include "material/metal.h"
 
 bool metal::scatter(const ray &ray_in, const hitdata &rec, glm::vec3 &attenuation, ray &scattered_ray) const
 {

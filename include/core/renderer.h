@@ -2,9 +2,9 @@
 #define RENDERER_H
 
 #include "material/material.h"
+#include "core/camera.h"
+#include "core/hittable.h"
 #include "common.h"
-#include "hittable.h"
-#include "camera.h"
 
 class renderer
 {

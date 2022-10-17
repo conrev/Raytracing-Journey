@@ -1,6 +1,7 @@
-#include "material/lambertian.h"
 #include "glm/gtc/random.hpp"
 #include "glm/gtc/epsilon.hpp"
+
+#include "material/lambertian.h"
 
 bool lambertian::scatter(const ray &ray_in, const hitdata &rec, glm::vec3 &attenuation, ray &scattered_ray) const
 {

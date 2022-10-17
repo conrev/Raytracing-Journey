@@ -1,8 +1,9 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "ray.h"
 #include "glm/glm.hpp"
+
+#include "core/ray.h"
 
 struct hitdata;
 

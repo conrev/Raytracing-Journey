@@ -11,9 +11,9 @@ namespace constants
 {
     const float INF = std::numeric_limits<float>::infinity();
     const float PI = 3.1415926535897932385;
-    const float SAMPLES_PER_PIXEL = 100;
+    const float SAMPLES_PER_PIXEL = 150;
     const int RAY_RECURSIVE_DEPTH = 50;
-    const int IMAGE_WIDTH = 400;
+    const int IMAGE_WIDTH = 800;
 
 }
 
@@ -37,7 +37,7 @@ inline float clamp(float x, float min, float max)
     return x;
 }
 
-inline float degrees_to_radians(float deg)
+inline float degrees_to_radians(double deg)
 {
     return deg / 180.0f * constants::PI;
 }

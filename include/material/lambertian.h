@@ -1,8 +1,8 @@
 #ifndef LAMBERTIAN_H
 #define LAMBERTIAN_H
 
+#include "core/hittable.h"
 #include "material.h"
-#include "hittable.h"
 
 class lambertian : public material
 {

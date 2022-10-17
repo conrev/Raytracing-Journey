@@ -2,8 +2,8 @@
 #define SPHERE_H
 
 #include "glm/glm.hpp"
-#include "common.h"
-#include "hittable.h"
+
+#include "core/hittable.h"
 
 class sphere : public hittable
 {

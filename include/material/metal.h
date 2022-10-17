@@ -1,8 +1,8 @@
 #ifndef METAL_H
 #define METAL_H
 
+#include "core/hittable.h"
 #include "material.h"
-#include "hittable.h"
 
 class metal : public material
 {
