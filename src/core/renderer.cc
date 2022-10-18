@@ -85,42 +85,6 @@ glm::vec3 renderer::per_pixel(float u, float v) const
     return glm::vec3(0.0f);
 }
 
-// color renderer::per_pixel(const ray &r, int recurse_depth) const
-// {
-//     hitdata hit;
-//     double min_t = constants::INF;
-//     bool hit_anything = false;
-
-//     if (recurse_depth <= 0)
-//     {
-//         return color(0.0, 0.0, 0.0);
-//     }
-
-//     for (const auto &obj : m_objects)
-//     {
-//         hitdata temp;
-//         bool intersect = obj->hit(r, 0.001f, min_t, temp);
-//         if (intersect)
-//         {
-//             hit_anything = true;
-//             hit = temp;
-//             min_t = temp.t;
-//         }
-//     }
-//     if (hit_anything)
-//     {
-//         color current_color;
-//         ray scattered_ray;
-//         if (hit.hit_material->scatter(r, hit, current_color, scattered_ray))
-//             return current_color * per_pixel(scattered_ray, recurse_depth - 1);
-//         // object doesnt scatter any light
-//         return color(0.0, 0.0, 0.0);
-//     }
-//     vec3 unit_direction = r.direction().normalize();
-//     double t = 0.5 * (unit_direction.y() + 1.0);
-//     return (1.0 - t) * color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
-// }
-
 void renderer::render()
 {
     for (int j = m_image_height - 1; j >= 0; --j)
