@@ -19,6 +19,7 @@ public:
     glm::vec3 per_pixel(float u, float v) const;
     glm::vec3 per_pixel(const ray &r, int recurse_depth) const;
     void render();
+    glm::vec3 *get_image_data() { return m_image_data.data(); };
 
 private:
     int m_image_width;

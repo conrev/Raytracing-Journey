@@ -87,9 +87,9 @@ glm::vec3 renderer::per_pixel(float u, float v) const
 
 void renderer::render()
 {
-    for (int j = m_image_height - 1; j >= 0; --j)
+    for (int j = 0; j < m_image_height; ++j)
     {
-        util::write_progress(std::cerr, j, m_image_height);
+        // util::write_progress(std::cerr, j, m_image_height);
         for (int i = 0; i < m_image_width; ++i)
         {
             glm::vec3 final_color(0.0f);
@@ -102,9 +102,9 @@ void renderer::render()
                 final_color += per_pixel(u, v);
                 // final_color += per_pixel(r, constants::RAY_RECURSIVE_DEPTH);
             }
-            m_image_data[j * m_image_width + i] = final_color / constants::SAMPLES_PER_PIXEL;
+            m_image_data[(m_image_height - 1 - j) * m_image_width + i] = glm::sqrt(final_color / constants::SAMPLES_PER_PIXEL);
         }
     }
 
-    util::write_image(std::cout, m_image_data, m_image_height, m_image_width);
+    // util::write_image(std::cout, m_image_data, m_image_height, m_image_width);
 }

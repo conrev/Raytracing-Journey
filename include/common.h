@@ -11,10 +11,8 @@ namespace constants
 {
     const float INF = std::numeric_limits<float>::infinity();
     const float PI = 3.1415926535897932385;
-    const float SAMPLES_PER_PIXEL = 150;
-    const int RAY_RECURSIVE_DEPTH = 50;
-    const int IMAGE_WIDTH = 800;
-
+    const float SAMPLES_PER_PIXEL = 32;
+    const int RAY_RECURSIVE_DEPTH = 8;
 }
 
 inline float random_float()

@@ -17,6 +17,7 @@
 #include "objects/plane.h"
 #include "material/lambertian.h"
 #include "material/metal.h"
+#include "util/timer.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
@@ -26,7 +27,6 @@ public:
     app() = default;
     app(const std::string &window_name, int window_width, int window_height)
     {
-        std::cerr << "coutt" << std::endl;
         // glfw: initialize and configure
         // ------------------------------
         glfwInit();
@@ -57,17 +57,30 @@ public:
         ImGui::CreateContext();
         ImGuiIO &io = ImGui::GetIO();
         (void)io;
-        // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // Enable Keyboard Controls
-        //  io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // Enable Docking
-        // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // Enable Multi-Viewport / Platform Windows
         ImGui::StyleColorsDark();
         ImGui_ImplGlfw_InitForOpenGL(m_window, true);
         ImGui_ImplOpenGL3_Init("#version 330");
+
+        // set up image render targets (textures)
+        glGenTextures(1, &m_render_target_id);
+        glBindTexture(GL_TEXTURE_2D, m_render_target_id);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     ~app()
     {
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDeleteTextures(1, &m_render_target_id);
+
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
@@ -81,8 +94,11 @@ public:
 
 private:
     GLFWwindow *m_window;
+    GLuint m_render_target_id;
     bool m_toolbox_menu_active;
     bool m_viewport_menu_active;
+    double m_lastrender_time;
+    std::unique_ptr<renderer> m_renderer;
 };
 
 #endif
