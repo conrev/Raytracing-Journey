@@ -37,9 +37,9 @@ namespace util
 
 }
 
-glm::vec3 renderer::per_pixel(float u, float v) const
+glm::vec3 renderer::per_pixel(ray cur_ray) const
 {
-    ray cur_ray = m_camera.generate_ray(u, v);
+
     glm::vec3 current_color = glm::vec3(1.0f, 1.0f, 1.0f);
     for (int i = 0; i < constants::RAY_RECURSIVE_DEPTH; i++)
     {
@@ -87,6 +87,7 @@ glm::vec3 renderer::per_pixel(float u, float v) const
 
 void renderer::render()
 {
+
     for (int j = 0; j < m_image_height; ++j)
     {
         // util::write_progress(std::cerr, j, m_image_height);
@@ -98,8 +99,8 @@ void renderer::render()
                 auto u = float(i + random_float()) / (m_image_width - 1); // normalized pixel coordinates
                 auto v = float(j + random_float()) / (m_image_height - 1);
                 // shoot from originto "canvas/viewport" coordinate
-                // ray r = m_camera.generate_ray(u, v);
-                final_color += per_pixel(u, v);
+                ray r = m_camera.generate_ray(u, v);
+                final_color += per_pixel(r);
                 // final_color += per_pixel(r, constants::RAY_RECURSIVE_DEPTH);
             }
             m_image_data[(m_image_height - 1 - j) * m_image_width + i] = glm::sqrt(final_color / constants::SAMPLES_PER_PIXEL);

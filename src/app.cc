@@ -32,9 +32,10 @@ void app::run()
 {
     // start the raytracer
     std::vector<std::shared_ptr<hittable>> objects = create_random_scene();
-    camera cam(glm::vec3{0.0f}, glm::vec3{0.0f}, 130, 1254 / 1061);
-    m_renderer = std::make_unique<renderer>(cam, objects, 1254);
-
+    glm::vec3 lookfrom = glm::vec3{-2.0f, 4.0f, 1.0f};
+    glm::vec3 lookat = glm::vec3{0.0f, 0.0f, -1.0f};
+    camera cam(lookfrom, lookat, glm::vec3{0, 1, 0}, 90, 1254 / 1061, 0.05f, (lookat - lookfrom).length());
+    m_renderer = std::make_unique<renderer>(cam, objects, 1254, 1061);
     while (!glfwWindowShouldClose(m_window))
     {
         ImGui_ImplOpenGL3_NewFrame();
@@ -76,6 +77,7 @@ void app::update()
     ImGui::End();
 
     ImGui::Begin("Scene");
+
     ImGui::End();
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
