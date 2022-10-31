@@ -13,6 +13,7 @@ PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/material/lambertian.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/material/metal.cc
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core/renderer.cc
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/material/dielectric.cc
 )
 
 

@@ -11,7 +11,7 @@ namespace constants
 {
     const float INF = std::numeric_limits<float>::infinity();
     const float PI = 3.1415926535897932385;
-    const float SAMPLES_PER_PIXEL = 32;
+    const float SAMPLES_PER_PIXEL = 50;
     const int RAY_RECURSIVE_DEPTH = 8;
 }
 

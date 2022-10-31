@@ -6,15 +6,51 @@ std::vector<std::shared_ptr<hittable>> create_random_scene()
         objects;
 
     std::shared_ptr<lambertian> diffusered = std::make_shared<lambertian>(glm::vec3(0.7, 0.3, 0.3));
-    std::shared_ptr<lambertian> diffusewhite = std::make_shared<lambertian>(glm::vec3(0.8, 0.8, 0.8));
-    std::shared_ptr<metal> metalgreen = std::make_shared<metal>(glm::vec3(0.0, 0.8, 0.0), 1.0f);
+    std::shared_ptr<lambertian> diffusegrey = std::make_shared<lambertian>(glm::vec3(0.5, 0.5, 0.5));
+    std::shared_ptr<dielectric> glass = std::make_shared<dielectric>(1.5);
     std::shared_ptr<metal> metalgrey = std::make_shared<metal>(glm::vec3(0.5, 0.5, 0.5), 0.2f);
 
-    objects.push_back(std::make_shared<sphere>(sphere{glm::vec3(0.0, 0.0, -1.0f), 0.5f, diffusered}));
-    objects.push_back(std::make_shared<sphere>(sphere{glm::vec3(1.0f, 0.0, -1.0f), 0.4f, metalgrey}));
-    objects.push_back(std::make_shared<sphere>(sphere{glm::vec3(-1.0f, 0.0, -1.0f), 0.4f, metalgreen}));
+    for (int a = -11; a < 11; a++)
+    {
+        for (int b = -11; b < 11; b++)
+        {
+            auto choose_mat = random_float();
+            glm::vec3 center(a + 0.9 * random_float(), 0.2, b + 0.9 * random_float());
+
+            if ((center - glm::vec3(4, 0.2, 0)).length() > 0.9)
+            {
+                std::shared_ptr<material> sphere_material;
+
+                if (choose_mat < 0.8)
+                {
+                    // diffuse
+                    auto albedo = glm::linearRand(glm::vec3(0.0f), glm::vec3(1.0f)) * glm::linearRand(glm::vec3(0.0f), glm::vec3(1.0f));
+                    sphere_material = std::make_shared<lambertian>(albedo);
+                    objects.push_back(std::make_shared<sphere>(center, 0.2, sphere_material));
+                }
+                else if (choose_mat < 0.95)
+                {
+                    // metal
+                    auto albedo = glm::linearRand(glm::vec3(0.5f), glm::vec3(1.0f));
+                    auto fuzz = random_float(0, 0.5);
+                    sphere_material = std::make_shared<metal>(albedo, fuzz);
+                    objects.push_back(std::make_shared<sphere>(center, 0.2, sphere_material));
+                }
+                else
+                {
+                    // glass
+                    sphere_material = std::make_shared<dielectric>(1.5);
+                    objects.push_back(std::make_shared<sphere>(center, 0.2, sphere_material));
+                }
+            }
+        }
+    }
+
+    objects.push_back(std::make_shared<sphere>(sphere{glm::vec3(-4.0f, 1.0f, 0.0f), 1.0f, diffusered}));
+    objects.push_back(std::make_shared<sphere>(sphere{glm::vec3(4.0f, 1.0, 0.0f), 1.0f, metalgrey}));
+    objects.push_back(std::make_shared<sphere>(sphere{glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, glass}));
     //   objects.push_back(sphere{vec3(-1.0f, 1.0, -1.7f), 0.3f});
-    objects.push_back(std::make_shared<plane>(plane{glm::vec3{0.0, -0.5f, -0.0f}, glm::vec3{0.0, 1.0, 0.0}, diffusewhite}));
+    objects.push_back(std::make_shared<plane>(plane{glm::vec3{0.0, 0.0f, -0.0f}, glm::vec3{0.0, 1.0, 0.0}, diffusegrey}));
 
     return objects;
 }
@@ -32,9 +68,9 @@ void app::run()
 {
     // start the raytracer
     std::vector<std::shared_ptr<hittable>> objects = create_random_scene();
-    glm::vec3 lookfrom = glm::vec3{-2.0f, 4.0f, 1.0f};
-    glm::vec3 lookat = glm::vec3{0.0f, 0.0f, -1.0f};
-    camera cam(lookfrom, lookat, glm::vec3{0, 1, 0}, 90, 1254 / 1061, 0.05f, (lookat - lookfrom).length());
+    glm::vec3 lookfrom = glm::vec3{13.0f, 2.0f, 3.0f};
+    glm::vec3 lookat = glm::vec3{0.0f, 0.0f, 0.0f};
+    camera cam(lookfrom, lookat, glm::vec3{0, 1, 0}, 90, 1254 / 1061, 0.1f, 10.0f);
     m_renderer = std::make_unique<renderer>(cam, objects, 1254, 1061);
     while (!glfwWindowShouldClose(m_window))
     {

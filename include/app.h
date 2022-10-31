@@ -17,6 +17,7 @@
 #include "objects/plane.h"
 #include "material/lambertian.h"
 #include "material/metal.h"
+#include "material/dielectric.h"
 #include "util/timer.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
@@ -52,6 +53,7 @@ public:
             std::exit(1);
         }
 
+        // imgui setup
         bool show_demo_window = true;
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();

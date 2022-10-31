@@ -106,6 +106,5 @@ void renderer::render()
             m_image_data[(m_image_height - 1 - j) * m_image_width + i] = glm::sqrt(final_color / constants::SAMPLES_PER_PIXEL);
         }
     }
-
     // util::write_image(std::cout, m_image_data, m_image_height, m_image_width);
 }
