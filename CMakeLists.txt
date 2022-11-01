@@ -16,6 +16,9 @@ PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/material/dielectric.cc
 )
 
+# OpenMP
+
+find_package(OpenMP)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE glm glad glfw imgui)
+target_link_libraries(${PROJECT_NAME} PRIVATE glm glad glfw imgui OpenMP::OpenMP_CXX)

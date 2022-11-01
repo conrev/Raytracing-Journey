@@ -87,7 +87,7 @@ glm::vec3 renderer::per_pixel(ray cur_ray) const
 
 void renderer::render()
 {
-
+#pragma omp parallel for
     for (int j = 0; j < m_image_height; ++j)
     {
         // util::write_progress(std::cerr, j, m_image_height);
@@ -107,4 +107,12 @@ void renderer::render()
         }
     }
     // util::write_image(std::cout, m_image_data, m_image_height, m_image_width);
+}
+
+void renderer::on_resize(int new_width, int new_height)
+{
+    m_camera.on_resize(static_cast<float>(new_width) / new_height);
+    m_image_data.resize(new_width * new_height);
+    m_image_height = new_height;
+    m_image_width = new_width;
 }

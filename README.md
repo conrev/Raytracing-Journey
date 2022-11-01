@@ -4,16 +4,18 @@ An interactive CPU Raytracer written in pure C++.
 
 ## Showcase
 
-## Supported Materials
+## Features:
 
-- Dielectrics (Refraction and Total Internal Reflection w/ Schlick's Approximation)
-- Diffuse / Pure Lambertian
-- Purely Reflective and Roughly Reflective (fuzzy) Metal
-
-## Camera-related Features
-
-- Depth of Field
-- Multi-sampling Anti-aliasing
+- Material:
+  - Dielectrics (Refraction and Total Internal Reflection w/ Schlick's Approximation)
+  - Diffuse / Pure Lambertian
+  - Purely Reflective and Roughly Reflective (fuzzy) Metal
+- Postprocessing:
+  - Depth of Field
+  - Multi-sampling Anti-aliasing
+- Primitives:
+  - Spheres
+  - Planes
 
 ## Dependencies:
 
@@ -21,6 +23,7 @@ An interactive CPU Raytracer written in pure C++.
 - **[Dear ImGUI](https://github.com/g-truc/glm)**
 - **[GLAD](https://github.com/Dav1dde/glad)**
 - **[GLFW](https://github.com/glfw/glfw)**
+- **OpenMP**
 
 All dependencies are included in the repository as a submodule, make sure to use `--recursive` flag when cloning.
 

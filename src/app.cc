@@ -70,8 +70,10 @@ void app::run()
     std::vector<std::shared_ptr<hittable>> objects = create_random_scene();
     glm::vec3 lookfrom = glm::vec3{13.0f, 2.0f, 3.0f};
     glm::vec3 lookat = glm::vec3{0.0f, 0.0f, 0.0f};
-    camera cam(lookfrom, lookat, glm::vec3{0, 1, 0}, 90, 1254 / 1061, 0.1f, 10.0f);
+    // TODO : REFACTOR IMAGE SIZE
+    camera cam(lookfrom, lookat, glm::vec3{0, 1, 0}, 50, 1254 / 1061, 0.1f, 10.0f);
     m_renderer = std::make_unique<renderer>(cam, objects, 1254, 1061);
+
     while (!glfwWindowShouldClose(m_window))
     {
         ImGui_ImplOpenGL3_NewFrame();
@@ -94,19 +96,34 @@ void app::run()
 void app::update()
 {
     ImGui::DockSpaceOverViewport(ImGui::GetMainViewport());
-    ImGui::ShowDemoWindow();
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("Viewport");
+
+    m_viewport_width = ImGui::GetContentRegionAvail().x;
+    m_viewport_height = ImGui::GetContentRegionAvail().y;
+
+    timer time_clock;
+
+    ImGui::Image((void *)(intptr_t)m_render_target_id, ImVec2(m_viewport_width, m_viewport_height));
+    //               ImVec2(0, 1), ImVec2(1, 0));
+
+    ImGui::End();
+    ImGui::PopStyleVar();
+
     ImGui::Begin("Settings");
     ImGui::Text("Last render: %.3fms", m_lastrender_time);
     if (ImGui::Button("Render"))
     {
         timer time_clock;
         time_clock.start();
+        m_renderer->on_resize(m_viewport_width, m_viewport_height);
         m_renderer->render();
         time_clock.stop();
         m_lastrender_time = time_clock.elapsedMilliseconds();
 
         glBindTexture(GL_TEXTURE_2D, m_render_target_id);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1254, 1061, 0, GL_RGB, GL_FLOAT, m_renderer->get_image_data());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_viewport_width, m_viewport_height, 0, GL_RGB, GL_FLOAT, m_renderer->get_image_data());
         glBindTexture(GL_TEXTURE_2D, 0);
         // Render();
     }
@@ -115,20 +132,4 @@ void app::update()
     ImGui::Begin("Scene");
 
     ImGui::End();
-
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-    ImGui::Begin("Viewport");
-
-    int image_width = ImGui::GetContentRegionAvail().x;
-    int image_height = ImGui::GetContentRegionAvail().y;
-    // auto image = m_Renderer.GetFinalImage();
-    // if (image)
-    timer time_clock;
-
-    ImGui::Image((void *)(intptr_t)m_render_target_id, ImVec2(image_width, image_height));
-    //               ImVec2(0, 1), ImVec2(1, 0));
-
-    ImGui::End();
-    ImGui::PopStyleVar();
-    // called every frame
 }

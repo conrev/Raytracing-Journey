@@ -2,7 +2,6 @@
 
 add_subdirectory(glm)
 
-
 # GLFW - has native cmake support
 
 set( GLFW_BUILD_EXAMPLES  OFF CACHE INTERNAL "" )

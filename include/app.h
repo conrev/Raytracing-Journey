@@ -99,8 +99,9 @@ private:
     GLuint m_render_target_id;
     bool m_toolbox_menu_active;
     bool m_viewport_menu_active;
-    double m_lastrender_time;
     std::unique_ptr<renderer> m_renderer;
+    float m_lastrender_time = 0;
+    int m_viewport_width = 0, m_viewport_height = 0;
 };
 
 #endif

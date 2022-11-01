@@ -18,6 +18,7 @@ public:
     glm::vec3 per_pixel(ray cur_ray) const;
     glm::vec3 *get_image_data() { return m_image_data.data(); };
     void render();
+    void on_resize(int new_width, int new_height);
 
 private:
     int m_image_width;
