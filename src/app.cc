@@ -1,58 +1,59 @@
 #include "app.h"
 
-std::vector<std::shared_ptr<hittable>> create_random_scene()
+namespace example
 {
-    std::vector<std::shared_ptr<hittable>>
-        objects;
-
-    std::shared_ptr<lambertian> diffusered = std::make_shared<lambertian>(glm::vec3(0.7, 0.3, 0.3));
-    std::shared_ptr<lambertian> diffusegrey = std::make_shared<lambertian>(glm::vec3(0.5, 0.5, 0.5));
-    std::shared_ptr<dielectric> glass = std::make_shared<dielectric>(1.5);
-    std::shared_ptr<metal> metalgrey = std::make_shared<metal>(glm::vec3(0.5, 0.5, 0.5), 0.2f);
-
-    for (int a = -11; a < 11; a++)
+    std::shared_ptr<group> create_random_scene()
     {
-        for (int b = -11; b < 11; b++)
+        std::shared_ptr<group> scene = std::make_shared<group>();
+
+        std::shared_ptr<lambertian> diffusegrey = std::make_shared<lambertian>(glm::vec3(0.5, 0.5, 0.5));
+        std::shared_ptr<lambertian> diffusered = std::make_shared<lambertian>(glm::vec3(0.7, 0.3, 0.3));
+        std::shared_ptr<dielectric> glass = std::make_shared<dielectric>(1.5);
+        std::shared_ptr<metal> metalgrey = std::make_shared<metal>(glm::vec3(0.5, 0.5, 0.5), 0.2f);
+        for (int a = -11; a < 11; a++)
         {
-            auto choose_mat = random_float();
-            glm::vec3 center(a + 0.9 * random_float(), 0.2, b + 0.9 * random_float());
-
-            if ((center - glm::vec3(4, 0.2, 0)).length() > 0.9)
+            for (int b = -11; b < 11; b++)
             {
-                std::shared_ptr<material> sphere_material;
+                auto choose_mat = random_float();
+                glm::vec3 center(a + 0.9 * random_float(), 0.2, b + 0.9 * random_float());
 
-                if (choose_mat < 0.8)
+                if ((center - glm::vec3(4, 0.2, 0)).length() > 0.9)
                 {
-                    // diffuse
-                    auto albedo = glm::linearRand(glm::vec3(0.0f), glm::vec3(1.0f)) * glm::linearRand(glm::vec3(0.0f), glm::vec3(1.0f));
-                    sphere_material = std::make_shared<lambertian>(albedo);
-                    objects.push_back(std::make_shared<sphere>(center, 0.2, sphere_material));
-                }
-                else if (choose_mat < 0.95)
-                {
-                    // metal
-                    auto albedo = glm::linearRand(glm::vec3(0.5f), glm::vec3(1.0f));
-                    auto fuzz = random_float(0, 0.5);
-                    sphere_material = std::make_shared<metal>(albedo, fuzz);
-                    objects.push_back(std::make_shared<sphere>(center, 0.2, sphere_material));
-                }
-                else
-                {
-                    // glass
-                    sphere_material = std::make_shared<dielectric>(1.5);
-                    objects.push_back(std::make_shared<sphere>(center, 0.2, sphere_material));
+                    std::shared_ptr<material> sphere_material;
+
+                    if (choose_mat < 0.8)
+                    {
+                        // diffuse
+                        auto albedo = glm::linearRand(glm::vec3(0.0f), glm::vec3(1.0f)) * glm::linearRand(glm::vec3(0.0f), glm::vec3(1.0f));
+                        sphere_material = std::make_shared<lambertian>(albedo);
+                        scene->add_object(std::make_shared<sphere>(center, 0.2, sphere_material));
+                    }
+                    else if (choose_mat < 0.95)
+                    {
+                        // metal
+                        auto albedo = glm::linearRand(glm::vec3(0.5f), glm::vec3(1.0f));
+                        auto fuzz = random_float(0, 0.5);
+                        sphere_material = std::make_shared<metal>(albedo, fuzz);
+                        scene->add_object(std::make_shared<sphere>(center, 0.2, sphere_material));
+                    }
+                    else
+                    {
+                        // glass
+                        sphere_material = std::make_shared<dielectric>(1.5);
+                        scene->add_object(std::make_shared<sphere>(center, 0.2, sphere_material));
+                    }
                 }
             }
         }
+
+        scene->add_object(std::make_shared<sphere>(sphere{glm::vec3(-4.0f, 1.0f, 0.0f), 1.0f, diffusered}));
+        scene->add_object(std::make_shared<sphere>(sphere{glm::vec3(4.0f, 1.0, 0.0f), 1.0f, metalgrey}));
+        scene->add_object(std::make_shared<sphere>(sphere{glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, glass}));
+
+        scene->add_object(std::make_shared<sphere>(sphere{glm::vec3{0.0, -1000.0f, 0.0f}, 1000.0f, diffusegrey}));
+
+        return scene;
     }
-
-    objects.push_back(std::make_shared<sphere>(sphere{glm::vec3(-4.0f, 1.0f, 0.0f), 1.0f, diffusered}));
-    objects.push_back(std::make_shared<sphere>(sphere{glm::vec3(4.0f, 1.0, 0.0f), 1.0f, metalgrey}));
-    objects.push_back(std::make_shared<sphere>(sphere{glm::vec3(0.0f, 1.0f, 0.0f), 1.0f, glass}));
-    //   objects.push_back(sphere{vec3(-1.0f, 1.0, -1.7f), 0.3f});
-    objects.push_back(std::make_shared<plane>(plane{glm::vec3{0.0, 0.0f, -0.0f}, glm::vec3{0.0, 1.0, 0.0}, diffusegrey}));
-
-    return objects;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -67,12 +68,11 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 void app::run()
 {
     // start the raytracer
-    std::vector<std::shared_ptr<hittable>> objects = create_random_scene();
+    m_active_scene = example::create_random_scene();
     glm::vec3 lookfrom = glm::vec3{13.0f, 2.0f, 3.0f};
     glm::vec3 lookat = glm::vec3{0.0f, 0.0f, 0.0f};
-    // TODO : REFACTOR IMAGE SIZE
-    camera cam(lookfrom, lookat, glm::vec3{0, 1, 0}, 50, 1254 / 1061, 0.1f, 10.0f);
-    m_renderer = std::make_unique<renderer>(cam, objects, 1254, 1061);
+    camera cam(lookfrom, lookat, glm::vec3{0, 1, 0}, 20, 1254 / 1061, 0.1f, 10.0f);
+    m_renderer = std::make_unique<renderer>(cam, 1254, 1061);
 
     while (!glfwWindowShouldClose(m_window))
     {
@@ -103,7 +103,7 @@ void app::update()
     m_viewport_width = ImGui::GetContentRegionAvail().x;
     m_viewport_height = ImGui::GetContentRegionAvail().y;
 
-    timer time_clock;
+    util::timer time_clock;
 
     ImGui::Image((void *)(intptr_t)m_render_target_id, ImVec2(m_viewport_width, m_viewport_height));
     //               ImVec2(0, 1), ImVec2(1, 0));
@@ -115,10 +115,10 @@ void app::update()
     ImGui::Text("Last render: %.3fms", m_lastrender_time);
     if (ImGui::Button("Render"))
     {
-        timer time_clock;
+
         time_clock.start();
         m_renderer->on_resize(m_viewport_width, m_viewport_height);
-        m_renderer->render();
+        m_renderer->render(m_active_scene);
         time_clock.stop();
         m_lastrender_time = time_clock.elapsedMilliseconds();
 

@@ -13,11 +13,6 @@
 
 #include "core/camera.h"
 #include "core/renderer.h"
-#include "objects/sphere.h"
-#include "objects/plane.h"
-#include "material/lambertian.h"
-#include "material/metal.h"
-#include "material/dielectric.h"
 #include "util/timer.h"
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
@@ -26,7 +21,7 @@ class app
 {
 public:
     app() = default;
-    app(const std::string &window_name, int window_width, int window_height)
+    app(const std::string &window_name, int window_width, int window_height) : m_active_scene(nullptr)
     {
         // glfw: initialize and configure
         // ------------------------------
@@ -100,6 +95,7 @@ private:
     bool m_toolbox_menu_active;
     bool m_viewport_menu_active;
     std::unique_ptr<renderer> m_renderer;
+    std::shared_ptr<group> m_active_scene;
     float m_lastrender_time = 0;
     int m_viewport_width = 0, m_viewport_height = 0;
 };

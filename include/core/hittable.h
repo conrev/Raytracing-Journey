@@ -40,6 +40,7 @@ class hittable
 public:
     hittable() = default;
     virtual bool hit(const ray &raySource, float t_min, float t_max, hitdata &hitInfo) const = 0;
+    glm::vec3 &position();
 };
 
 #endif
