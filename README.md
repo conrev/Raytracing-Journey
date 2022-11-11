@@ -4,7 +4,8 @@ An interactive CPU Raytracer written in pure C++.
 
 ## Showcase
 
-<img width="962" alt="image" src="https://user-images.githubusercontent.com/18559322/200169494-e787bea0-2b63-4ce6-87bd-6953c8929cf5.png">
+<img width="959" alt="image" src="https://user-images.githubusercontent.com/18559322/200287401-abf06f01-899a-4bab-8248-ad513291bb4c.png">
+
 
 
 ## Features:
