@@ -41,6 +41,9 @@ public:
 
     void on_resize(float new_aspect_ratio)
     {
+        if (new_aspect_ratio == m_aspect_ratio)
+            return;
+
         float change_in_aspect = new_aspect_ratio / m_aspect_ratio;
         m_horizontal_span = m_horizontal_span * change_in_aspect;
         m_lower_left_corner = m_origin - m_horizontal_span / 2.0f - m_vertical_span / 2.0f - m_focus_vec * m_focus_distance;

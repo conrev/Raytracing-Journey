@@ -21,7 +21,7 @@ class app
 {
 public:
     app() = default;
-    app(const std::string &window_name, int window_width, int window_height) : m_active_scene(nullptr)
+    app(const std::string &window_name, int window_width, int window_height)
     {
         // glfw: initialize and configure
         // ------------------------------
@@ -95,7 +95,8 @@ private:
     bool m_toolbox_menu_active;
     bool m_viewport_menu_active;
     std::unique_ptr<renderer> m_renderer;
-    std::shared_ptr<group> m_active_scene;
+    scene m_active_scene;
+    int m_active_camera;
     float m_lastrender_time = 0;
     int m_viewport_width = 0, m_viewport_height = 0;
 };

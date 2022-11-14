@@ -1,10 +1,10 @@
 #include "core/renderer.h"
 
-glm::vec3 renderer::per_pixel(ray cur_ray, std::shared_ptr<group> objects_to_render) const
+glm::vec3 renderer::per_pixel(ray cur_ray, const std::shared_ptr<group> &objects_to_render) const
 {
 
     glm::vec3 current_color = glm::vec3(1.0f, 1.0f, 1.0f);
-    for (int i = 0; i < constants::RAY_RECURSIVE_DEPTH; i++)
+    for (size_t i = 0; i < settings::RAY_RECURSIVE_DEPTH; i++)
     {
         hitdata hit;
 
@@ -35,25 +35,28 @@ glm::vec3 renderer::per_pixel(ray cur_ray, std::shared_ptr<group> objects_to_ren
     return glm::vec3(0.0f);
 }
 
-void renderer::render(std::shared_ptr<group> objects_to_render)
+void renderer::render(const scene &scene_to_render, int active_camera_id)
 {
+
+    camera active_cam = scene_to_render.cameras[active_camera_id];
+    active_cam.on_resize(static_cast<float>(m_image_width) / m_image_height);
+
 #pragma omp parallel for
-    for (int j = 0; j < m_image_height; ++j)
+    for (size_t j = 0; j < m_image_height; ++j)
     {
         // util::write_progress(std::cerr, j, m_image_height);
-        for (int i = 0; i < m_image_width; ++i)
+        for (size_t i = 0; i < m_image_width; ++i)
         {
             glm::vec3 final_color(0.0f);
-            for (int s = 0; s < constants::SAMPLES_PER_PIXEL; ++s)
+            for (size_t s = 0; s < settings::SAMPLES_PER_PIXEL; ++s)
             {
                 auto u = float(i + random_float()) / (m_image_width - 1); // normalized pixel coordinates
                 auto v = float(j + random_float()) / (m_image_height - 1);
                 // shoot from originto "canvas/viewport" coordinate
-                ray r = m_camera.generate_ray(u, v);
-                final_color += per_pixel(r, objects_to_render);
-                // final_color += per_pixel(r, constants::RAY_RECURSIVE_DEPTH);
+                ray r = active_cam.generate_ray(u, v);
+                final_color += per_pixel(r, scene_to_render.objects);
             }
-            m_image_data[(m_image_height - 1 - j) * m_image_width + i] = glm::sqrt(final_color / constants::SAMPLES_PER_PIXEL);
+            m_image_data[(m_image_height - 1 - j) * m_image_width + i] = glm::sqrt(final_color / static_cast<float>(settings::SAMPLES_PER_PIXEL));
         }
     }
     // util::write_image(std::cout, m_image_data, m_image_height, m_image_width);
@@ -64,7 +67,6 @@ void renderer::on_resize(int new_width, int new_height)
     if (new_width == m_image_width && new_height == m_image_height)
         return;
 
-    m_camera.on_resize(static_cast<float>(new_width) / new_height);
     m_image_data.resize(new_width * new_height);
     m_image_height = new_height;
     m_image_width = new_width;
