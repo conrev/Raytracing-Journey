@@ -4,7 +4,7 @@ An interactive CPU Raytracer written in pure C++.
 
 ## Showcase
 
-<img width="965" alt="image" src="https://github.com/conrev/Raytracing-Journey/assets/18559322/65c4ed22-4430-4757-8244-83927cfcb4ac">
+<img width="965" alt="image" src="https://github.com/conrev/Raytracing-Journey/assets/18559322/4ee17675-fae4-4dff-9159-0f4014b2a4ae">
 <img width="965" alt="image" src="https://github.com/conrev/Raytracing-Journey/assets/18559322/097cacae-3cca-44bb-99ea-793cdfa6f402">
 
 
