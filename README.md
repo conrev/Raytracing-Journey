@@ -1,6 +1,6 @@
 # Raytracing-Journey
 
-An interactive CPU Raytracer written in pure C++. Supports multithreading and 
+An interactive CPU Raytracer written in pure C++.
 
 ## Showcase
 
