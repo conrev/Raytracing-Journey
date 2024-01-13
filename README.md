@@ -21,8 +21,9 @@ An interactive CPU Raytracer written in pure C++.
 - Primitives:
   - Spheres
   - Planes
-- Interative Features:
-  - Multiple Cameras and
+- Interactive Features:
+  - Multiple Cameras (with real-time switching)
+  - Customizable ray depth and sample size
 
 ## Dependencies:
 
