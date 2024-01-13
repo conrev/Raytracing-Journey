@@ -1,10 +1,11 @@
 # Raytracing-Journey
 
-An interactive CPU Raytracer written in pure C++.
+An interactive CPU Raytracer written in pure C++. Supports multithreading and 
 
 ## Showcase
 
-<img width="959" alt="image" src="https://user-images.githubusercontent.com/18559322/200287401-abf06f01-899a-4bab-8248-ad513291bb4c.png">
+<img width="965" alt="image" src="https://github.com/conrev/Raytracing-Journey/assets/18559322/65c4ed22-4430-4757-8244-83927cfcb4ac">
+<img width="965" alt="image" src="https://github.com/conrev/Raytracing-Journey/assets/18559322/097cacae-3cca-44bb-99ea-793cdfa6f402">
 
 
 
@@ -20,6 +21,8 @@ An interactive CPU Raytracer written in pure C++.
 - Primitives:
   - Spheres
   - Planes
+- Interative Features:
+  - Multiple Cameras and
 
 ## Dependencies:
 
